@@ -15,16 +15,22 @@ describe('httpCookies()', function () {
 
   describe('when invoked', function () {
     beforeEach(function () {
-      this.config = {
-        domain: 'foobar',
-        maxAge: 42
-      };
-      this.middleware = httpCookies(this.config);
+      this.middleware = httpCookies();
     });
 
     it('should return a middleware function', function () {
       expect(this.middleware).to.be.a('function');
       expect(this.middleware.length).to.equal(3);
+    });
+  });
+
+  describe('middleware api', function () {
+    beforeEach(function () {
+      this.config = {
+        domain: 'foobar',
+        maxAge: 42
+      };
+      this.middleware = httpCookies(this.config);
     });
 
     describe('when the middleware function is invoked', function () {
