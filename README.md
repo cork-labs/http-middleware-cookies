@@ -43,6 +43,12 @@ const options = { domain: 'example.com', maxAge: 24 * 60 * 60 };
 app.use(httpCookies(options));
 ```
 
+### secure (default: true)
+
+All cookies are flagged as secure, meaning the browser will only return them when connecting over encrypted connections.
+
+It's only safe to switch this setting to `false` in development environments.
+
 ### domain (default: null)
 
 All cookies set are valid for this domain.

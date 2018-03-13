@@ -73,7 +73,12 @@ describe('httpCookies()', function () {
         });
 
         it('should forward the arguments and the configured domain to res.cookie()', function () {
-          expect(this.res.cookie).to.have.been.calledWithExactly('name', 'value', {domain: this.config.domain, httpOnly: true});
+          const expected = {
+            domain: this.config.domain,
+            secure: true,
+            httpOnly: true
+          };
+          expect(this.res.cookie).to.have.been.calledWithExactly('name', 'value', expected);
         });
       });
 
@@ -88,7 +93,13 @@ describe('httpCookies()', function () {
         });
 
         it('should forward the arguments, the configured maxAge, and the configured domain to res.cookie()', function () {
-          expect(this.res.cookie).to.have.been.calledWithExactly('name', 'value', {domain: this.config.domain, maxAge: this.config.maxAge, httpOnly: true});
+          const expected = {
+            domain: this.config.domain,
+            maxAge: this.config.maxAge,
+            secure: true,
+            httpOnly: true
+          };
+          expect(this.res.cookie).to.have.been.calledWithExactly('name', 'value', expected);
         });
       });
 
@@ -104,7 +115,46 @@ describe('httpCookies()', function () {
         });
 
         it('should forward the arguments, including maxAge, to res.cookie()', function () {
-          expect(this.res.cookie).to.have.been.calledWithExactly('name', 'value', {domain: this.config.domain, maxAge: this.maxAge, httpOnly: true});
+          const expected = {
+            domain: this.config.domain,
+            maxAge: this.maxAge,
+            secure: true,
+            httpOnly: true
+          };
+          expect(this.res.cookie).to.have.been.calledWithExactly('name', 'value', expected);
+        });
+      });
+    });
+
+    describe('when configuration is custom', function () {
+      beforeEach(function () {
+        this.config = {
+          domain: 'foo.bar',
+          maxAge: 42,
+          secure: false
+        };
+        this.middleware = httpCookies(this.config);
+      });
+
+      describe('and the middleware function is invoked followed by setCookie()', function () {
+        beforeEach(function () {
+          this.req = {};
+          this.res = {
+            cookie: sinon.spy()
+          };
+          this.nextSpy = sinon.spy();
+          this.middleware(this.req, this.res, this.nextSpy);
+          this.res.setCookie('name', 'value', this.maxAge);
+        });
+
+        it('should forward the custom arguments to res.cookie()', function () {
+          const expected = {
+            domain: this.config.domain,
+            maxAge: this.config.maxAge,
+            secure: false,
+            httpOnly: true
+          };
+          expect(this.res.cookie).to.have.been.calledWithExactly('name', 'value', expected);
         });
       });
     });
