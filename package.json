@@ -1,6 +1,6 @@
 {
   "name": "@cork-labs/http-middleware-cookies",
-  "version": "0.3.1",
+  "version": "0.3.2-pre",
   "description": "Express middleware, exposes simple cookie related methods in res",
   "license": "MIT",
   "homepage": "https://github.com/cork-labs/http-middleware-cookies",
